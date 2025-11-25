@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cursos - Administração</title>
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-book"></i> Sistema de Cursos
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:href="@{/cursos/publico}">Ver Site Público</a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div th:if="${sucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${sucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${erro}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${erro}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-list-ul"></i> Gerenciar Cursos</h2>
+            <a th:href="@{/admin/cursos/novo}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Novo Curso
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div th:if="${cursos != null and !cursos.isEmpty()}">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Carga Horária</th>
+                                <th>Preço</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="curso : ${cursos}">
+                                <td th:text="${curso.id}"></td>
+                                <td th:text="${curso.nome}"></td>
+                                <td th:text="${curso.categoria}"></td>
+                                <td th:text="${curso.cargaHoraria} + ' horas'"></td>
+                                <td th:text="'R$ ' + ${#numbers.formatDecimal(curso.preco, 0, 2)}"></td>
+                                <td>
+                                    <a th:href="@{/admin/cursos/editar/{id}(id=${curso.id})}" 
+                                       class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <form th:action="@{/admin/cursos/deletar/{id}(id=${curso.id})}" 
+                                          method="post" 
+                                          class="d-inline"
+                                          th:onclick="return confirm('Tem certeza que deseja excluir este curso?')">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Excluir
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div th:if="${cursos == null or cursos.isEmpty()}" class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                    <p class="text-muted mt-3">Nenhum curso cadastrado ainda.</p>
+                    <a th:href="@{/admin/cursos/novo}" class="btn btn-primary">Cadastrar Primeiro Curso</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
+

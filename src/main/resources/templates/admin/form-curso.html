@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${curso.id != null ? 'Editar Curso' : 'Novo Curso'}">Formulário de Curso</title>
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="bi bi-book"></i> Sistema de Cursos
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" th:href="@{/admin/cursos}">Voltar para Lista</a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 th:text="${curso.id != null ? 'Editar Curso' : 'Novo Curso'}">
+                            Formulário de Curso
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/cursos/salvar}" th:object="${curso}" method="post">
+                            <input type="hidden" th:field="*{id}"/>
+                            
+                            <div class="mb-3">
+                                <label for="nome" class="form-label">Nome do Curso <span class="text-danger">*</span></label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="nome" 
+                                       th:field="*{nome}"
+                                       th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                                <div th:if="${#fields.hasErrors('nome')}" class="invalid-feedback">
+                                    <span th:errors="*{nome}"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="descricao" class="form-label">Descrição <span class="text-danger">*</span></label>
+                                <textarea class="form-control" 
+                                          id="descricao" 
+                                          th:field="*{descricao}"
+                                          rows="4"
+                                          th:classappend="${#fields.hasErrors('descricao')} ? 'is-invalid'"></textarea>
+                                <div th:if="${#fields.hasErrors('descricao')}" class="invalid-feedback">
+                                    <span th:errors="*{descricao}"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cargaHoraria" class="form-label">Carga Horária (horas) <span class="text-danger">*</span></label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="cargaHoraria" 
+                                           th:field="*{cargaHoraria}"
+                                           min="1"
+                                           th:classappend="${#fields.hasErrors('cargaHoraria')} ? 'is-invalid'">
+                                    <div th:if="${#fields.hasErrors('cargaHoraria')}" class="invalid-feedback">
+                                        <span th:errors="*{cargaHoraria}"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="categoria" class="form-label">Categoria <span class="text-danger">*</span></label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="categoria" 
+                                           th:field="*{categoria}"
+                                           th:classappend="${#fields.hasErrors('categoria')} ? 'is-invalid'">
+                                    <div th:if="${#fields.hasErrors('categoria')}" class="invalid-feedback">
+                                        <span th:errors="*{categoria}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="preco" class="form-label">Preço (R$) <span class="text-danger">*</span></label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="preco" 
+                                       th:field="*{preco}"
+                                       step="0.01"
+                                       min="0"
+                                       th:classappend="${#fields.hasErrors('preco')} ? 'is-invalid'">
+                                <div th:if="${#fields.hasErrors('preco')}" class="invalid-feedback">
+                                    <span th:errors="*{preco}"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{/admin/cursos}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save"></i> Salvar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
+
